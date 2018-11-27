@@ -1,0 +1,19 @@
+{
+    "name": "steevanb/php-accessor",
+    "license": "MIT",
+    "type": "lib",
+    "description": "Export class properties accessors in trait",
+    "autoload": {
+        "psr-4": { "steevanb\\PhpAccessor\\": "" }
+    },
+    "require": {
+        "php": "^7.1",
+        "doctrine/annotations": "1.0.*"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/steevanb/php-accessor.git"
+        }
+    ]
+}
