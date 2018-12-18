@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\CodeWriter;
 
-use steevanb\PhpAccessor\{
+use steevanb\PhpAccessor\{CodeAnalyzer\CodeAnalyzerInterface,
     CodeGenerator\Behavior\TemplateTrait,
-    Property\PropertyDefinitionArray
-};
+    Property\PropertyDefinitionArray,
+    Report\Report};
 use Symfony\Component\Filesystem\Filesystem;
 
 class TraitCodeWriter implements CodeWriterInterface
@@ -32,26 +32,30 @@ class TraitCodeWriter implements CodeWriterInterface
     /** @var ?\ReflectionClass */
     protected $traitReflection;
 
-    public function __construct(
-        ?string $classNamespace,
-        string $className,
-        PropertyDefinitionArray $propertyDefinitions
-    ) {
-        if (is_int(strpos($className, '\\'))) {
-            throw new \Exception('$className should not contains namespace parts.');
-        }
-        $this->classFqcn = ($classNamespace === null ? $className : $classNamespace . '\\' . $className);
+    /** @var Report */
+    protected $report;
+
+    public function __construct(CodeAnalyzerInterface $analyzer)
+    {
+        $this->classFqcn = $analyzer->getFqcn();
         $this->traitDir =
             dirname((new \ReflectionClass($this->classFqcn))->getFileName())
             . DIRECTORY_SEPARATOR
             . 'Accessors';
-        $this->traitNamespace = ($classNamespace === null ? null : $classNamespace . '\\') . 'Accessors';
-        $this->traitName = $className . 'AccessorsTrait';
+        $this->traitNamespace =
+            (
+                $analyzer->getClassNamespace() === null
+                    ? null
+                    : $analyzer->getClassNamespace() . '\\'
+            )
+            . 'Accessors';
+        $this->traitName = $analyzer->getClassName() . 'AccessorsTrait';
         $this->traitReflection = trait_exists($this->traitNamespace . '\\' . $this->traitName)
             ? new \ReflectionClass($this->traitNamespace . '\\' . $this->traitName)
             : null;
 
-        $this->propertyDefinitions = $propertyDefinitions;
+        $this->propertyDefinitions = $analyzer->getPropertyDefinitions();
+        $this->report = $analyzer->getReport();
     }
 
     public function getCode(): ?string
@@ -86,7 +90,8 @@ class TraitCodeWriter implements CodeWriterInterface
             if (is_dir($this->traitDir) === false) {
                 (new Filesystem())->mkdir($this->traitDir);
             }
-            file_put_contents($this->traitDir . DIRECTORY_SEPARATOR . $this->traitName . '.php', $code);
+            // DEBUG
+//            file_put_contents($this->traitDir . DIRECTORY_SEPARATOR . $this->traitName . '.php', $code);
         }
 
         return $this;

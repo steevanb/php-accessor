@@ -6,8 +6,8 @@ namespace steevanb\PhpAccessor\CodeGenerator;
 
 use steevanb\PhpAccessor\{
     CodeGenerator\Behavior\RemovePluralTrait,
-    Method\Method,
-    Method\MethodArray,
+    Method\MethodDefinition,
+    Method\MethodDefinitionArray,
     Property\PropertyDefinition,
     Property\PropertyType
 };
@@ -20,8 +20,8 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config
-    ): MethodArray {
-        $methods = new MethodArray();
+    ): MethodDefinitionArray {
+        $methods = new MethodDefinitionArray();
 
         $this
             ->addSetter($propertyDefinition, $propertyReflection, $config, $methods)
@@ -37,7 +37,7 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config,
-        MethodArray $methods
+        MethodDefinitionArray $methods
     ): self {
         if ($config['adder'] === true) {
             $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'], $propertyReflection)[1];
@@ -68,7 +68,7 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
 
             $this->showTemplateBlock($code, 'phpTypeHint', is_string($phpTypeHint));
 
-            $methods[] = (new Method($methodName))
+            $methods[] = (new MethodDefinition($methodName))
                 ->setCode($code);
         }
 
@@ -79,7 +79,7 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config,
-        MethodArray $methods
+        MethodDefinitionArray $methods
     ): self {
         if ($config['remover'] === true) {
             $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'], $propertyReflection)[1];
@@ -100,14 +100,14 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
 
             $this->showTemplateBlock($code, 'nullable', PropertyType::isNullable($phpDocType));
 
-            $methods[] = (new Method($methodName))
+            $methods[] = (new MethodDefinition($methodName))
                 ->setCode($code);
         }
 
         return $this;
     }
 
-    protected function addClearer(PropertyDefinition $propertyDefinition, array $config, MethodArray $methods ): self
+    protected function addClearer(PropertyDefinition $propertyDefinition, array $config, MethodDefinitionArray $methods ): self
     {
         if ($config['clearer'] === true) {
             $methodName = $config['clearerMethod'] ?? 'clear' . ucfirst($propertyDefinition->getName());
@@ -124,7 +124,7 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
                 ]
             );
 
-            $methods[] = (new Method($methodName))
+            $methods[] = (new MethodDefinition($methodName))
                 ->setCode($code);
         }
 

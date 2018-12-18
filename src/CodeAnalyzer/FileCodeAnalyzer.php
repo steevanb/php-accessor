@@ -8,13 +8,13 @@ use Doctrine\Common\Annotations\{
     AnnotationReader,
     AnnotationRegistry
 };
-use steevanb\PhpAccessor\{
-    Annotation\Accessors,
+use steevanb\PhpAccessor\{Annotation\Accessors,
     Annotation\Parser\AnnotationParserService,
     Property\PropertyDefinition,
     Property\PropertyDefinitionArray,
-    Property\PropertyType
-};
+    Property\PropertyType,
+    Report\PropertyReport,
+    Report\Report};
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileCodeAnalyzer implements CodeAnalyzerInterface
@@ -28,20 +28,27 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
     /** @var string */
     protected $className;
 
+    /** @var string */
+    protected $fqcn;
+
     /** @var \ReflectionClass */
     protected $reflectionClass;
 
     /** @var PropertyDefinitionArray */
     protected $propertyDefinitions;
 
+    /** @var Report */
+    protected $report;
+
     public function __construct(string $fileName)
     {
         $this->fileName = $fileName;
         [$this->namespace, $this->className] = static::getNamespaceAndClassName();
-        $this->reflectionClass = new \ReflectionClass(
-            ($this->namespace === null) ? $this->className : $this->namespace . '\\' . $this->className
-        );
+        $this->fqcn = ($this->namespace === null) ? $this->className : $this->namespace . '\\' . $this->className;
+        $this->reflectionClass = new \ReflectionClass($this->fqcn);
         $this->propertyDefinitions = new PropertyDefinitionArray();
+        $this->report = (new Report($this->reflectionClass->getName()))
+            ->setFileName($fileName);
 
         AnnotationRegistry::registerFile(__DIR__ . '/../Annotation/Accessors.php');
     }
@@ -56,6 +63,16 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
         return $this->reflectionClass->getShortName();
     }
 
+    public function getFqcn(): string
+    {
+        return $this->fqcn;
+    }
+
+    public function getReport(): Report
+    {
+        return $this->report;
+    }
+
     /** @return $this */
     public function analyze(): CodeAnalyzerInterface
     {
@@ -67,14 +84,15 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
     }
 
     /** @return $this */
-    public function analyzeProperty(string $property): CodeAnalyzerInterface
+    public function analyzeProperty(string $name): CodeAnalyzerInterface
     {
-        $propertyReflection = $this->reflectionClass->getProperty($property);
+        $propertyReflection = $this->reflectionClass->getProperty($name);
+        $propertyDefinition = new PropertyDefinition($this->getClassNamespace(), $this->getClassName(), $name);
+        $this->report->addProperty(new PropertyReport($propertyDefinition));
+
         /** @var Accessors $annotation */
         $annotation = (new AnnotationReader())->getPropertyAnnotation($propertyReflection, Accessors::class);
-
         if ($annotation instanceof Accessors) {
-            $propertyDefinition = new PropertyDefinition($this->getClassNamespace(), $this->getClassName(), $property);
             $propertyType = PropertyType::parsePropertyType($annotation->getVar());
             $parser = is_string($annotation->getParser())
                 ? AnnotationParserService::getSingleton()->getParser($annotation->getParser())
@@ -85,11 +103,13 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
             $options = $optionsResolver->resolve($annotation->getOptions());
             $options['type'] = $propertyType;
 
-            $propertyDefinition->addMethods(
-                $parser->getCodeGenerator()->getMethods($propertyDefinition, $propertyReflection, $options)
-            );
+            $propertyDefinition
+                ->setHasAnnotation(true)
+                ->addMethods(
+                    $parser->getCodeGenerator()->getMethods($propertyDefinition, $propertyReflection, $options)
+                );
 
-            $this->propertyDefinitions[] = $propertyDefinition;
+            $this->addPropertyDefinition($propertyDefinition);
         }
 
         return $this;
@@ -123,7 +143,7 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
                             break;
                         }
                     }
-                } elseif ($tokens[$i][0] === T_CLASS) {
+                } elseif ($tokens[$i][0] === T_CLASS || $tokens[$i][0] === T_TRAIT) {
                     for ($j = $i + 1; $j < count($tokens); $j++) {
                         if ($tokens[$j] === '{') {
                             $class = $tokens[$i + 2][1];

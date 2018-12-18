@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use steevanb\PhpAccessor\Command\GenerateCommand;
+use Symfony\Component\Console\Application;
+
+requireAutoload();
+
+$application = new Application('urltest');
+$command = new GenerateCommand();
+$application->add($command);
+$application->setDefaultCommand($command->getName(), true);
+$application->run();
+
+function requireAutoload(): void
+{
+    foreach ($_SERVER['argv'] as $index => $arg) {
+        if (substr($arg, 0, 11) === '--autoload=') {
+            $autoloads = [substr($arg, 11)];
+            unset($_SERVER['argv'][$index]);
+            break;
+        }
+    }
+    $autoloads = $autoloads ?? [
+        __DIR__ . '/../autoload.php',
+        __DIR__ . '/../../../autoload.php'
+    ];
+    $autoloadIncluded = false;
+    foreach ($autoloads as $autoload) {
+        if (file_exists($autoload)) {
+            require($autoload);
+            $autoloadIncluded = true;
+            break;
+        }
+    }
+    if ($autoloadIncluded === false) {
+        throw new \Exception('Autoload file "' . implode(', ', $autoloads) . '" not found.');
+    }
+}

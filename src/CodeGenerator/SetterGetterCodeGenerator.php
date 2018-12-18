@@ -8,8 +8,8 @@ use steevanb\PhpAccessor\{
     CodeGenerator\Behavior\GetGetterCodeTrait,
     CodeGenerator\Behavior\GetSetterCodeTrait,
     CodeGenerator\Behavior\TemplateTrait,
-    Method\Method,
-    Method\MethodArray,
+    Method\MethodDefinition,
+    Method\MethodDefinitionArray,
     Property\PropertyDefinition
 };
 
@@ -23,9 +23,9 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config
-    ): MethodArray
+    ): MethodDefinitionArray
     {
-        $methods = new MethodArray();
+        $methods = new MethodDefinitionArray();
 
         $this
             ->addSetter($propertyDefinition, $propertyReflection, $config, $methods)
@@ -39,7 +39,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config,
-        MethodArray $methods
+        MethodDefinitionArray $methods
     ): self {
         if ($config['setter'] === true) {
             $methodName = $config['setterMethod'] ?? 'set' . ucfirst($propertyReflection->getName());
@@ -50,7 +50,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
                 'method' => $methodName,
                 'parameter' => $config['setterParameter']
             ];
-            $methods[] = (new Method($methodName))
+            $methods[] = (new MethodDefinition($methodName))
                 ->setCode($this->getSetterCode($propertyDefinition, $propertyReflection, $setterConfig));
         }
 
@@ -62,7 +62,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config,
-        MethodArray $methods
+        MethodDefinitionArray $methods
     ): self {
         if ($config['getter'] === true) {
             $methodName = $config['getterMethod'] ?? 'get' . ucfirst($propertyReflection->getName());
@@ -72,7 +72,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
                 'template' => $config['getterTemplate'],
                 'method' => $methodName
             ];
-            $methods[] = (new Method($methodName))
+            $methods[] = (new MethodDefinition($methodName))
                 ->setCode($this->getGetterCode($propertyDefinition, $propertyReflection, $getterConfig));
         }
 

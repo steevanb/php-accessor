@@ -6,19 +6,19 @@ namespace steevanb\PhpAccessor\Method;
 
 use steevanb\PhpTypedArray\ObjectArray;
 
-class MethodArray extends ObjectArray
+class MethodDefinitionArray extends ObjectArray
 {
     public function __construct(array $values = [])
     {
-        parent::__construct($values, Method::class);
+        parent::__construct($values, MethodDefinition::class);
     }
 
-    public function current(): ?Method
+    public function current(): ?MethodDefinition
     {
         return parent::current();
     }
 
-    public function offsetGet($offset): Method
+    public function offsetGet($offset): MethodDefinition
     {
         return parent::offsetGet($offset);
     }

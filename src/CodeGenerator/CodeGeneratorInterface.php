@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace steevanb\PhpAccessor\CodeGenerator;
 
 use steevanb\PhpAccessor\{
-    Method\MethodArray,
+    Method\MethodDefinitionArray,
     Property\PropertyDefinition
 };
 
@@ -15,5 +15,5 @@ interface CodeGeneratorInterface
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config
-    ): MethodArray;
+    ): MethodDefinitionArray;
 }

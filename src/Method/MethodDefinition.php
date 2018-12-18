@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Method;
 
-class Method
+class MethodDefinition
 {
     /** @var string */
     protected $name;
