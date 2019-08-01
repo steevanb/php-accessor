@@ -6,7 +6,7 @@ namespace steevanb\PhpAccessor\Annotation\Parser;
 
 class AnnotationParserService
 {
-    /** @var ?AnnotationParserFactory */
+    /** @var ?AnnotationParserService */
     protected static $singleton;
 
     public static function getSingleton(): self

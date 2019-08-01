@@ -8,7 +8,7 @@ use Symfony\Component\Console\Application;
 
 requireAutoload();
 
-$application = new Application('urltest');
+$application = new Application('phpAccessor');
 $command = new GenerateCommand();
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);
@@ -25,7 +25,8 @@ function requireAutoload(): void
     }
     $autoloads = $autoloads ?? [
         __DIR__ . '/../autoload.php',
-        __DIR__ . '/../../../autoload.php'
+        __DIR__ . '/../../../autoload.php',
+        __DIR__ . '/../vendor/autoload.php'
     ];
     $autoloadIncluded = false;
     foreach ($autoloads as $autoload) {

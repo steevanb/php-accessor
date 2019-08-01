@@ -8,13 +8,15 @@ use Doctrine\Common\Annotations\{
     AnnotationReader,
     AnnotationRegistry
 };
-use steevanb\PhpAccessor\{Annotation\Accessors,
+use steevanb\PhpAccessor\{
+    Annotation\Accessors,
     Annotation\Parser\AnnotationParserService,
     Property\PropertyDefinition,
     Property\PropertyDefinitionArray,
     Property\PropertyType,
     Report\PropertyReport,
-    Report\Report};
+    Report\Report
+};
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileCodeAnalyzer implements CodeAnalyzerInterface
@@ -130,7 +132,8 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
 
     protected function getNamespaceAndClassName(): array
     {
-        $class = $namespace = null;
+        $class = null;
+        $namespace = null;
         $tokens = token_get_all(file_get_contents($this->fileName));
 
         for ($i = 0; $i < count($tokens); $i++) {
@@ -147,6 +150,7 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
                     for ($j = $i + 1; $j < count($tokens); $j++) {
                         if ($tokens[$j] === '{') {
                             $class = $tokens[$i + 2][1];
+                            break 2;
                         }
                     }
                 }

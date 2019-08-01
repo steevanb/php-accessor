@@ -44,9 +44,6 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
             $phpTypeHint = PropertyType::getSingularPhpTypeFromIterable($phpDocType, $config['adderAllowNull']);
             if (substr($config['type'], -2) === '[]' && strpos($config['type'], '|') === false) {
                 $phpTypeHint = substr($config['type'], 0, -2);
-                if (substr($phpTypeHint, 0, 1) !== '\\') {
-                    $phpTypeHint = '\\' . $phpTypeHint;
-                }
             }
             $methodName = $config['adderMethod'] ?? 'add' . $this->removePlural(ucfirst($propertyDefinition->getName()));
 

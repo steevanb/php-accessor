@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Property;
 
-use phpDocumentor\{Reflection\DocBlock\Tags\Var_,
+use phpDocumentor\{
+    Reflection\DocBlock\Tags\Var_,
     Reflection\DocBlockFactory,
     Reflection\Type,
     Reflection\TypeResolver,
@@ -19,12 +20,13 @@ use phpDocumentor\{Reflection\DocBlock\Tags\Var_,
     Reflection\Types\Nullable,
     Reflection\Types\Scalar,
     Reflection\Types\String_,
-    Reflection\Types\Void_};
+    Reflection\Types\Void_
+};
 use phpDocumentor\Reflection\Types\This;
 
 class PropertyType
 {
-    static public function getPhpAndPhpDocTypes(?string $type, \ReflectionProperty $property): array
+    public static function getPhpAndPhpDocTypes(?string $type, \ReflectionProperty $property): array
     {
         $phpTypeHint = null;
         $phpDocType = null;
@@ -61,7 +63,7 @@ class PropertyType
     }
 
     /** Return singular part if $type is an array. Ex: string for string[], string|int for string[]|int[] */
-    static public function getSingularPhpAndPhpDocTypes(?string $type, \ReflectionProperty $property): array
+    public static function getSingularPhpAndPhpDocTypes(?string $type, \ReflectionProperty $property): array
     {
         [$phpTypeHint, $phpDocType] = static::getPhpAndPhpDocTypes($type, $property);
 
@@ -72,7 +74,7 @@ class PropertyType
         return [$phpTypeHint, $phpDocType];
     }
 
-    static public function getPhpTypeHint(Type $type): ?string
+    public static function getPhpTypeHint(Type $type): ?string
     {
         $return = null;
 
@@ -109,7 +111,7 @@ class PropertyType
         return $return;
     }
 
-    static public function parsePropertyType(?string $type): ?string
+    public static function parsePropertyType(?string $type): ?string
     {
         if ($type === null) {
             return null;
@@ -168,7 +170,7 @@ class PropertyType
     }
 
     /** Ex: array => null, iterable => null, string[] => string, string[]|int[] => null, string[]|null => ?string */
-    static public function getSingularPhpTypeFromIterable(?string $type, bool $allowNull): ?string
+    public static function getSingularPhpTypeFromIterable(?string $type, bool $allowNull): ?string
     {
         if (is_string($type)) {
             $type = static::parsePropertyType($type);
@@ -202,7 +204,7 @@ class PropertyType
         return $return;
     }
 
-    static public function isNullable(?string $type): bool
+    public static function isNullable(?string $type): bool
     {
         if ($type === null) {
             $return = true;

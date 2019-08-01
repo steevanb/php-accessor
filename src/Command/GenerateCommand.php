@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Command;
 
-use steevanb\PhpAccessor\{CodeAnalyzer\FileCodeAnalyzer,
+use steevanb\PhpAccessor\{
+    CodeAnalyzer\FileCodeAnalyzer,
     CodeWriter\TraitCodeWriter,
-    Property\PropertyDefinitionArray,
-    Report\Exporter\ConsoleReportExporter};
-use steevanb\PhpTypedArray\StringArray;
+    Report\Exporter\ConsoleReportExporter
+};
 use Symfony\Component\Console\{
     Command\Command,
     Input\InputArgument,
     Input\InputInterface,
     Output\OutputInterface
 };
+use steevanb\PhpTypedArray\ScalarArray\StringArray;
 
 class GenerateCommand extends Command
 {

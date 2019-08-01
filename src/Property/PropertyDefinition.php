@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Property;
 
-use steevanb\PhpAccessor\{
-    Annotation\Accessors,
-    Method\MethodDefinitionArray
-};
+use steevanb\PhpAccessor\Annotation\Accessors;
+use steevanb\PhpAccessor\Method\MethodDefinitionArray;
+use steevanb\PhpAccessor\Property\Accessors\PropertyDefinitionAccessorsTrait;
 
 class PropertyDefinition
 {
-    /** @Accessors(var="string[]") */
+    use PropertyDefinitionAccessorsTrait;
+
+    /** @var MethodDefinitionArray */
     protected $methods;
 
     /** @var ?string */
@@ -20,10 +21,10 @@ class PropertyDefinition
     /** @var string */
     protected $className;
 
-    /** @var string */
+    /** @Accessors(var="string", setter=false) */
     protected $name;
 
-    /** @var bool */
+    /** @Accessors(var="string", getterMethod="hasAnnotation") */
     protected $hasAnnotation = false;
 
     public function __construct(?string $classNamespace, string $className, string $name)
@@ -32,11 +33,6 @@ class PropertyDefinition
         $this->className = $className;
         $this->name = $name;
         $this->methods = new MethodDefinitionArray();
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function addMethods(MethodDefinitionArray $methods): self
@@ -51,17 +47,5 @@ class PropertyDefinition
     public function getMethods(): MethodDefinitionArray
     {
         return $this->methods;
-    }
-
-    public function setHasAnnotation(bool $hasAnnotation): self
-    {
-        $this->hasAnnotation = $hasAnnotation;
-
-        return $this;
-    }
-
-    public function hasAnnotation(): bool
-    {
-        return $this->hasAnnotation;
     }
 }

@@ -90,8 +90,7 @@ class TraitCodeWriter implements CodeWriterInterface
             if (is_dir($this->traitDir) === false) {
                 (new Filesystem())->mkdir($this->traitDir);
             }
-            // DEBUG
-//            file_put_contents($this->traitDir . DIRECTORY_SEPARATOR . $this->traitName . '.php', $code);
+            file_put_contents($this->traitDir . DIRECTORY_SEPARATOR . $this->traitName . '.php', $code);
         }
 
         return $this;

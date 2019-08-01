@@ -13,7 +13,10 @@
         "symfony/options-resolver": "^3.0||^4.0",
         "symfony/console": "^3.0||^4.0",
         "phpdocumentor/reflection-docblock": "^3.0||^4.0",
-        "steevanb/php-typed-array": "^1.1"
+        "steevanb/php-typed-array": "^2.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.0"
     },
     "bin": ["bin/accessor"],
     "repositories": [

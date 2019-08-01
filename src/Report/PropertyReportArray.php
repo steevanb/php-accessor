@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Report;
 
-use steevanb\PhpTypedArray\ObjectArray;
+use steevanb\PhpTypedArray\ObjectArray\ObjectArray;
 
 class PropertyReportArray extends ObjectArray
 {
