@@ -26,7 +26,7 @@ class PropertyDefinition
     /** @Accessors(var="string", setter=false) */
     protected $name;
 
-    /** @Accessors(var="string", getterMethod="hasAnnotation") */
+    /** @Accessors(var="bool", getterMethod="hasAnnotation") */
     protected $hasAnnotation = false;
 
     public function __construct(?string $classNamespace, string $className, string $name)
