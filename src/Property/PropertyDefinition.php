@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Property;
 
-use steevanb\PhpAccessor\Annotation\Accessors;
-use steevanb\PhpAccessor\Method\MethodDefinitionArray;
-use steevanb\PhpAccessor\Property\Accessors\PropertyDefinitionAccessorsTrait;
+use steevanb\PhpAccessor\{
+    Annotation\Accessors,
+    Method\MethodDefinitionArray,
+    Property\Accessors\PropertyDefinitionAccessorsTrait
+};
 
 class PropertyDefinition
 {

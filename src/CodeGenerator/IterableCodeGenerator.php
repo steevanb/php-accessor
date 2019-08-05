@@ -45,7 +45,8 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
             if (substr($config['type'], -2) === '[]' && strpos($config['type'], '|') === false) {
                 $phpTypeHint = substr($config['type'], 0, -2);
             }
-            $methodName = $config['adderMethod'] ?? 'add' . $this->removePlural(ucfirst($propertyDefinition->getName()));
+            $methodName =
+                $config['adderMethod'] ?? 'add' . $this->removePlural(ucfirst($propertyDefinition->getName()));
 
             $code = $this->getTemplateContent(
                 $config['adderTemplate'] ?? __DIR__ . '/Templates/Iterable/adder.tpl'
@@ -80,7 +81,8 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
     ): self {
         if ($config['remover'] === true) {
             $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'], $propertyReflection)[1];
-            $methodName = $config['removerMethod'] ?? 'remove' . $this->removePlural(ucfirst($propertyDefinition->getName()));
+            $methodName =
+                $config['removerMethod'] ?? 'remove' . $this->removePlural(ucfirst($propertyDefinition->getName()));
 
             $code = $this->getTemplateContent(
                 $config['removerTemplate'] ?? __DIR__ . '/Templates/Iterable/remover.tpl'
@@ -104,8 +106,11 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
         return $this;
     }
 
-    protected function addClearer(PropertyDefinition $propertyDefinition, array $config, MethodDefinitionArray $methods ): self
-    {
+    protected function addClearer(
+        PropertyDefinition $propertyDefinition,
+        array $config,
+        MethodDefinitionArray $methods
+    ): self {
         if ($config['clearer'] === true) {
             $methodName = $config['clearerMethod'] ?? 'clear' . ucfirst($propertyDefinition->getName());
 

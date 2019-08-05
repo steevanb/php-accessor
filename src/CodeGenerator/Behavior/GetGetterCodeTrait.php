@@ -11,9 +11,10 @@ use steevanb\PhpAccessor\{
 
 trait GetGetterCodeTrait
 {
-    // use TemplateTrait to include them
     abstract protected function getTemplateContent(string $filePath): string;
+
     abstract protected function replaceTemplateVars(string &$code, array $vars): void;
+
     abstract protected function showTemplateBlock(string &$code, string $name, bool $show = true): void;
 
     protected function getGetterCode(

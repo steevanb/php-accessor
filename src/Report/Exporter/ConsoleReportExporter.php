@@ -94,6 +94,7 @@ class ConsoleReportExporter extends AbstractExporter
                 break;
             default:
                 $return = (string) $written;
+                break;
         }
 
         return $return;
