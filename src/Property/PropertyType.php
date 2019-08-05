@@ -43,7 +43,9 @@ class PropertyType
             try {
                 /** @var $varTag ?Var_ */
                 $varTag = DocBlockFactory::createInstance()->create($phpDoc)->getTagsByName('var')[0] ?? null;
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                // Nothing to do if we don't find @var tag
+            }
 
             if ($varTag instanceof Var_) {
                 if ($phpTypeHint === null) {
@@ -68,7 +70,8 @@ class PropertyType
         [$phpTypeHint, $phpDocType] = static::getPhpAndPhpDocTypes($type, $property);
 
         if ($phpTypeHint === 'array' && substr($phpDocType, -2) === '[]') {
-            $phpTypeHint = $phpDocType = substr($phpDocType, 0, -2);
+            $phpTypeHint = substr($phpDocType, 0, -2);
+            $phpDocType = $phpTypeHint;
         }
 
         return [$phpTypeHint, $phpDocType];
@@ -102,6 +105,11 @@ class PropertyType
                 case This::class:
                 case Void_::class:
                     $return .= (string) $finalType;
+                    break;
+                default:
+                    if (is_string($return)) {
+                        throw new \Exception('Unknown type "' . get_class($finalType) . '".');
+                    }
                     break;
             }
         } else {
@@ -182,7 +190,9 @@ class PropertyType
             $resolvedType = null;
             try {
                 $resolvedType = (new TypeResolver())->resolve($singularType);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                // Nothing to do if we don't find the type
+            }
 
             if ($resolvedType instanceof Type) {
                 switch (get_class($resolvedType)) {
@@ -192,9 +202,10 @@ class PropertyType
                     case Scalar::class:
                     case String_::class:
                         $return = ($allowNull ? '?' : null) . $singularType;
-                    break;
+                        break;
                     default:
                         $return = null;
+                        break;
                 }
             }
         } else {
@@ -212,7 +223,9 @@ class PropertyType
             $resolvedType = null;
             try {
                 $resolvedType = (new TypeResolver())->resolve($type);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                // Nohing to do if we don't find the type
+            }
 
             if ($resolvedType === null) {
                 $return = true;

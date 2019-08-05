@@ -40,7 +40,11 @@ class PropertyReport
         $return = $this->getMethodOrNull($name);
         if ($return === null) {
             throw new \Exception(
-                'Method report "' . $name . '" not found for property ' . $this->getPropertyDefinition()->getName() . '.'
+                'Method report "'
+                . $name
+                . '" not found for property '
+                . $this->getPropertyDefinition()->getName()
+                . '.'
             );
         }
 
@@ -49,16 +53,15 @@ class PropertyReport
 
     protected function getMethodOrNull(string $name): ?MethodReport
     {
-        $return = $this->methods[$name] ?? null;
-        if ($return === null) {
+        if ($this->methods[$name] ?? null === null) {
             foreach ($this->getPropertyDefinition()->getMethods() as $method) {
                 if ($method->getName() === $name) {
-                    $return = $this->methods[$name] = new MethodReport($name, $method);
+                    $this->methods[$name] = new MethodReport($name, $method);
                     break;
                 }
             }
         }
 
-        return $return;
+        return $this->methods[$name] ?? null;
     }
 }

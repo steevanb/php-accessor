@@ -142,7 +142,7 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
                     for ($j = $i + 1; $j < count($tokens); $j++) {
                         if (is_array($tokens[$j]) && $tokens[$j][0] === T_STRING) {
                             $namespace .= (is_string($namespace) ? '\\' : null) . $tokens[$j][1];
-                        } else if (is_string($tokens[$j]) && ($tokens[$j] === '{' || $tokens[$j] === ';')) {
+                        } elseif (is_string($tokens[$j]) && ($tokens[$j] === '{' || $tokens[$j] === ';')) {
                             break;
                         }
                     }

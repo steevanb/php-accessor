@@ -11,17 +11,17 @@ use steevanb\PhpAccessor\{
 
 trait GetSetterCodeTrait
 {
-    // use TemplateTrait to include them
     abstract protected function getTemplateContent(string $filePath): string;
+
     abstract protected function replaceTemplateVars(string &$code, array $vars): void;
+
     abstract protected function showTemplateBlock(string &$code, string $name, bool $show = true): void;
 
     protected function getSetterCode(
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config
-    ): ?string
-    {
+    ): ?string {
         [$phpTypeHint, $phpDocType] = PropertyType::getPhpAndPhpDocTypes($config['type'], $propertyReflection);
 
         $return = $this->getTemplateContent(

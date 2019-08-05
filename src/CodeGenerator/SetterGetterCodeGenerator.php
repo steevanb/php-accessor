@@ -23,8 +23,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
         PropertyDefinition $propertyDefinition,
         \ReflectionProperty $propertyReflection,
         array $config
-    ): MethodDefinitionArray
-    {
+    ): MethodDefinitionArray {
         $methods = new MethodDefinitionArray();
 
         $this
