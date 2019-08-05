@@ -17,14 +17,32 @@ class AllAccessorsCases
     /** @Accessors(var="?string") */
     public $nullableString;
 
-    /** @Accessors(setter=false, getterMethod="getFooString") */
+    /** @Accessors(var="string", setter=false, getterMethod="getFooString") */
     public $stringGetter = 'bar';
 
-    /** @Accessors(getter=false, setterMethod="setFooString") */
+    /** @Accessors(var="string", getter=false, setterMethod="setFooString") */
     public $stringSetter = 'baz';
+
+    /** @Accessors(var="string", getter=false, setterParameter="parameterName") */
+    public $stringSetterParameterName = 'boz';
 
     /** @Accessors(var="int") */
     public $int = 10;
+
+    /** @Accessors(var="?int") */
+    public $nullableInt;
+
+    /** @Accessors(var="int", setter=false, getterMethod="getFooInt") */
+    public $intGetter = 'bar';
+
+    /** @Accessors(var="int", getter=false, setterMethod="setFooInt") */
+    public $intSetter = 'baz';
+
+    /** @Accessors(var="int", getter=false, setterParameter="parameterName") */
+    public $intSetterParameterName = 'boz';
+
+    /** @Accessors(var="integer") */
+    public $integer = 11;
 
     /** @Accessors(var="float") */
     public $float = 10.10;

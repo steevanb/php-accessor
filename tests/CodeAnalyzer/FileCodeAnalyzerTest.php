@@ -32,14 +32,19 @@ final class FileCodeAnalyzerTest extends TestCase
         $analyzer = $this->getFileCodeAnalyzer();
         $analyze = $analyzer->analyze();
 
-        static::assertCount(12, $analyze->getPropertyDefinitions());
         $properties = [
             'unknownType',
             'string',
             'nullableString',
             'stringGetter',
             'stringSetter',
+            'stringSetterParameterName',
             'int',
+            'nullableInt',
+            'intGetter',
+            'intSetter',
+            'intSetterParameterName',
+            'integer',
             'float',
             'double',
             'array',
@@ -47,6 +52,7 @@ final class FileCodeAnalyzerTest extends TestCase
             'dateTime',
             'allAccessorsCases'
         ];
+        static::assertCount(count($properties), $analyze->getPropertyDefinitions());
         foreach ($analyze->getPropertyDefinitions() as $propertyIndex => $propertyDefinition) {
             static::assertSame($properties[$propertyIndex], $propertyDefinition->getName());
         }
