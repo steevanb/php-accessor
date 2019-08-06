@@ -6,7 +6,7 @@ namespace steevanb\PhpAccessor\Tests\CodeGenerator\SetterGetterCodeGenerator;
 
 use PHPUnit\Framework\TestCase;
 
-final class StringTest extends TestCase
+final class UnknownTypeTest extends TestCase
 {
     use GetMethodsTrait;
 

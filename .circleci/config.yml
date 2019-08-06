@@ -34,7 +34,7 @@ jobs:
                 command: /var/entrypoint.sh
     phpunit:
         docker:
-            - image: php:7.2-fpm-alpine3.9
+            - image: php:7.2-cli-alpine3.9
         working_directory: ~/php-accessor
         steps:
             - checkout
@@ -42,14 +42,14 @@ jobs:
                 at: .
             - run:
                 name: phpunit
-                command: ./vendor/bin/phpunit
+                command: ./bin/phpunit
 
 workflows:
     version: '2.1'
     build:
         jobs:
             - phpcs
-#            - composer
-#            - phpunit:
-#                requires:
-#                    - composer
+            - composer
+            - phpunit:
+                requires:
+                    - composer
