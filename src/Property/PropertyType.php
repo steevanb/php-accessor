@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Property;
 
-use phpDocumentor\{
-    Reflection\DocBlock\Tags\Var_,
+use phpDocumentor\{Reflection\DocBlock\Tags\Var_,
     Reflection\DocBlockFactory,
     Reflection\Type,
     Reflection\TypeResolver,
@@ -18,10 +17,10 @@ use phpDocumentor\{
     Reflection\Types\Iterable_,
     Reflection\Types\Null_,
     Reflection\Types\Nullable,
+    Reflection\Types\Object_,
     Reflection\Types\Scalar,
     Reflection\Types\String_,
-    Reflection\Types\Void_
-};
+    Reflection\Types\Void_};
 use phpDocumentor\Reflection\Types\This;
 
 class PropertyType
@@ -107,7 +106,7 @@ class PropertyType
                     $return .= (string) $finalType;
                     break;
                 default:
-                    if (is_string($return)) {
+                    if (is_string($return) && get_class($finalType) !== Object_::class) {
                         throw new \Exception('Unknown type "' . get_class($finalType) . '".');
                     }
                     break;

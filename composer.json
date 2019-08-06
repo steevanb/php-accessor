@@ -4,7 +4,10 @@
     "type": "lib",
     "description": "Export class properties accessors in trait",
     "autoload": {
-        "psr-4": { "steevanb\\PhpAccessor\\": "src/" }
+        "psr-4": {
+            "steevanb\\PhpAccessor\\": "src/",
+            "steevanb\\PhpAccessor\\Tests\\": "tests"
+        }
     },
     "require": {
         "php": "^7.1",
@@ -16,7 +19,8 @@
         "steevanb/php-typed-array": "^2.0"
     },
     "require-dev": {
-        "symfony/var-dumper": "^4.0"
+        "symfony/var-dumper": "^4.0",
+        "phpunit/phpunit": "^8.2"
     },
     "bin": ["bin/accessor"],
     "repositories": [

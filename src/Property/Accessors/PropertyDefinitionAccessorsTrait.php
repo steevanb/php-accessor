@@ -12,14 +12,14 @@ trait PropertyDefinitionAccessorsTrait
         return $this->name;
     }
 
-    public function setHasAnnotation(string $hasAnnotation): self
+    public function setHasAnnotation(bool $hasAnnotation): self
     {
         $this->hasAnnotation = $hasAnnotation;
 
         return $this;
     }
 
-    public function hasAnnotation(): string
+    public function hasAnnotation(): bool
     {
         return $this->hasAnnotation;
     }

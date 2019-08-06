@@ -8,15 +8,14 @@ use Doctrine\Common\Annotations\{
     AnnotationReader,
     AnnotationRegistry
 };
-use steevanb\PhpAccessor\{
-    Annotation\Accessors,
+use steevanb\PhpAccessor\{Annotation\Accessors,
+    Annotation\Parser\AnnotationParserInterface,
     Annotation\Parser\AnnotationParserService,
     Property\PropertyDefinition,
     Property\PropertyDefinitionArray,
     Property\PropertyType,
     Report\PropertyReport,
-    Report\Report
-};
+    Report\Report};
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileCodeAnalyzer implements CodeAnalyzerInterface
@@ -96,14 +95,8 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
         $annotation = (new AnnotationReader())->getPropertyAnnotation($propertyReflection, Accessors::class);
         if ($annotation instanceof Accessors) {
             $propertyType = PropertyType::parsePropertyType($annotation->getVar());
-            $parser = is_string($annotation->getParser())
-                ? AnnotationParserService::getSingleton()->getParser($annotation->getParser())
-                : AnnotationParserService::getSingleton()->getParserFromProperty($propertyReflection, $propertyType);
-
-            $optionsResolver = (new OptionsResolver());
-            $parser->configureOptions($optionsResolver);
-            $options = $optionsResolver->resolve($annotation->getOptions());
-            $options['type'] = $propertyType;
+            $parser = $this->getAnnotationParser($annotation, $propertyReflection, $propertyType);
+            $options = $this->configureAnnotationOptions($parser, $annotation, $propertyType);
 
             $propertyDefinition
                 ->setHasAnnotation(true)
@@ -115,6 +108,29 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
         }
 
         return $this;
+    }
+
+    public function getAnnotationParser(
+        Accessors $annotation,
+        \ReflectionProperty $propertyReflection,
+        ?string $propertyType
+    ): AnnotationParserInterface {
+        return is_string($annotation->getParser())
+            ? AnnotationParserService::getSingleton()->getParser($annotation->getParser())
+            : AnnotationParserService::getSingleton()->getParserFromProperty($propertyReflection, $propertyType);
+    }
+
+    public function configureAnnotationOptions(
+        AnnotationParserInterface $parser,
+        Accessors $annotation,
+        ?string $propertyType
+    ): array {
+        $optionsResolver = (new OptionsResolver());
+        $parser->configureOptions($optionsResolver);
+        $return = $optionsResolver->resolve($annotation->getOptions());
+        $return['type'] = $propertyType;
+
+        return $return;
     }
 
     /** @return $this */

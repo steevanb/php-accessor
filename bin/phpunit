@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+readonly PROJECT_DIRECTORY=$(realpath $(dirname $(realpath $0))/..)
+
+set -e
+
+if [ $(which docker || false) ]; then
+    docker run \
+        --rm \
+        -it \
+        -v ${PROJECT_DIRECTORY}:/var/phpunit \
+        php:7.2-cli-alpine3.9 \
+        /var/phpunit/bin/phpunit
+else
+    ${PROJECT_DIRECTORY}/vendor/bin/phpunit -c ${PROJECT_DIRECTORY}/phpunit.xml ${PROJECT_DIRECTORY}/tests
+fi
