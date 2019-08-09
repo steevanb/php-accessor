@@ -11,9 +11,5 @@ use steevanb\PhpAccessor\{
 
 interface CodeGeneratorInterface
 {
-    public function getMethods(
-        PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
-        array $config
-    ): MethodDefinitionArray;
+    public function getMethods(PropertyDefinition $propertyDefinition, array $config): MethodDefinitionArray;
 }

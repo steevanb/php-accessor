@@ -4,13 +4,20 @@ readonly PROJECT_DIRECTORY=$(realpath $(dirname $(realpath $0))/..)
 
 set -e
 
+readonly TESTS_DIR=${1}
+if [ "${TESTS_DIR}" = "" ]; then
+    readonly CONTAINER_TESTS_DIR=tests
+else
+    readonly CONTAINER_TESTS_DIR=${TESTS_DIR}
+fi
+
 if [ $(which docker || false) ]; then
     docker run \
         --rm \
         -it \
         -v ${PROJECT_DIRECTORY}:/var/phpunit \
         php:7.2-cli-alpine3.9 \
-        /var/phpunit/bin/phpunit
+        /var/phpunit/bin/phpunit ${CONTAINER_TESTS_DIR}
 else
-    ${PROJECT_DIRECTORY}/vendor/bin/phpunit -c ${PROJECT_DIRECTORY}/phpunit.xml ${PROJECT_DIRECTORY}/tests
+    ${PROJECT_DIRECTORY}/vendor/bin/phpunit -c ${PROJECT_DIRECTORY}/phpunit.xml ${PROJECT_DIRECTORY}/${CONTAINER_TESTS_DIR}
 fi
