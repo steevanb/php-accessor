@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Property;
 
-use phpDocumentor\{Reflection\DocBlock\Tags\Var_,
+use phpDocumentor\{
+    Reflection\DocBlock\Tags\Var_,
     Reflection\DocBlockFactory,
     Reflection\Type,
     Reflection\TypeResolver,
@@ -20,12 +21,13 @@ use phpDocumentor\{Reflection\DocBlock\Tags\Var_,
     Reflection\Types\Object_,
     Reflection\Types\Scalar,
     Reflection\Types\String_,
-    Reflection\Types\Void_};
+    Reflection\Types\Void_
+};
 use phpDocumentor\Reflection\Types\This;
 
 class PropertyType
 {
-    public static function getPhpAndPhpDocTypes(?string $type, \ReflectionProperty $property): array
+    public static function getPhpAndPhpDocTypes(?string $type): array
     {
         $phpTypeHint = null;
         $phpDocType = null;
@@ -37,25 +39,6 @@ class PropertyType
             $phpDocType = static::parsePropertyType($type);
         }
 
-        $phpDoc = $property->getDocComment();
-        if (($phpTypeHint === null || $phpDocType === null) && $phpDoc !== null) {
-            try {
-                /** @var $varTag ?Var_ */
-                $varTag = DocBlockFactory::createInstance()->create($phpDoc)->getTagsByName('var')[0] ?? null;
-            } catch (\Exception $e) {
-                // Nothing to do if we don't find @var tag
-            }
-
-            if ($varTag instanceof Var_) {
-                if ($phpTypeHint === null) {
-                    $phpTypeHint = static::getPhpTypeHint($varTag->getType());
-                }
-                if ($phpDocType === null) {
-                    $phpDocType = (string) $varTag;
-                }
-            }
-        }
-
         if (is_string($phpTypeHint) && substr($phpTypeHint, -2) === '[]') {
             $phpTypeHint = (substr($phpTypeHint, 0, 1) === '?' ? '?' : null) . 'array';
         }
@@ -64,9 +47,9 @@ class PropertyType
     }
 
     /** Return singular part if $type is an array. Ex: string for string[], string|int for string[]|int[] */
-    public static function getSingularPhpAndPhpDocTypes(?string $type, \ReflectionProperty $property): array
+    public static function getSingularPhpAndPhpDocTypes(?string $type): array
     {
-        [$phpTypeHint, $phpDocType] = static::getPhpAndPhpDocTypes($type, $property);
+        [$phpTypeHint, $phpDocType] = static::getPhpAndPhpDocTypes($type);
 
         if ($phpTypeHint === 'array' && substr($phpDocType, -2) === '[]') {
             $phpTypeHint = substr($phpDocType, 0, -2);

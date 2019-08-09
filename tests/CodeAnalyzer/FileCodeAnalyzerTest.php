@@ -24,7 +24,7 @@ final class FileCodeAnalyzerTest extends TestCase
     public function testGetFqcn(): void
     {
         $analyzer = $this->getFileCodeAnalyzer();
-        static::assertSame('steevanb\PhpAccessor\Tests\AllAccessorsCases', $analyzer->getFqcn());
+        static::assertSame('steevanb\PhpAccessor\Tests\StringAccessorsCases', $analyzer->getFqcn());
     }
 
     public function testAnalyze(): void

@@ -5,67 +5,48 @@ declare(strict_types=1);
 namespace steevanb\PhpAccessor\Tests\CodeGenerator\SetterGetterCodeGenerator;
 
 use PHPUnit\Framework\TestCase;
-use steevanb\PhpAccessor\{
-    Tests\CodeGenerator\SetterGetterCodeGenerator\Behavior\AssertAccessorsTrait,
-    Tests\CodeGenerator\SetterGetterCodeGenerator\Behavior\AssertNullableAccessorsTrait,
-    Tests\StringAccessorsCases
-};
+use steevanb\PhpAccessor\Tests\DoubleAccessorsCases;
 
-final class StringTypeTest extends TestCase
+final class DoubleTypeTest extends TestCase
 {
     use GetMethodsTrait;
-    use AssertAccessorsTrait;
-    use AssertNullableAccessorsTrait;
 
     public function testAccessors(): void
     {
-        static::assertAccessors(
-            $this->getMethods(StringAccessorsCases::class, 'property', ['type' => 'string']),
-            $this->getSetterCode(),
-            $this->getGetterCode()
-        );
+        $methods = $this->getMethods(DoubleAccessorsCases::class, 'property', ['type' => 'double']);
+        static::assertCount(2, $methods);
+
+        static::assertSame('setProperty', $methods[0]->getName());
+        static::assertSame($this->getSetterCode(), $methods[0]->getCode());
+
+        static::assertSame('getProperty', $methods[1]->getName());
+        static::assertSame($this->getGetterCode(), $methods[1]->getCode());
     }
 
-    public function testNullableAccessorsPhpTypeHint(): void
+    public function testNullableAccessors(): void
     {
-        static::assertNullableAccessors(
-            $this->getMethods(StringAccessorsCases::class, 'nullableProperty', ['type' => '?string']),
-            $this->getNullableSetterCode(),
-            $this->getNullableGetterCode()
-        );
-    }
+        $methods = $this->getMethods(DoubleAccessorsCases::class, 'nullableProperty', ['type' => '?double']);
+        static::assertCount(2, $methods);
 
-    public function testNullableAccessorsPhpDocFirst(): void
-    {
-        static::assertNullableAccessors(
-            $this->getMethods(StringAccessorsCases::class, 'nullableProperty', ['type' => 'null|string']),
-            $this->getNullableSetterCode(),
-            $this->getNullableGetterCode()
-        );
-    }
+        static::assertSame('setNullableProperty', $methods[0]->getName());
+        static::assertSame($this->getNullableSetterCode(), $methods[0]->getCode());
 
-    public function testNullableAccessorsPhpDocLast(): void
-    {
-        static::assertNullableAccessors(
-            $this->getMethods(StringAccessorsCases::class, 'nullableProperty', ['type' => 'string|null']),
-            $this->getNullableSetterCode(),
-            $this->getNullableGetterCode()
-        );
+        static::assertSame('getNullableProperty', $methods[1]->getName());
+        static::assertSame($this->getNullableGetterCode(), $methods[1]->getCode());
     }
 
     public function testSetterOnly(): void
     {
         $methods = $this->getMethods(
-            StringAccessorsCases::class,
+            DoubleAccessorsCases::class,
             'setterOnlyProperty',
             [
-                'type' => 'string',
+                'type' => 'double',
                 'getter' => false,
                 'setterMethod' => 'setFooProperty'
             ]
         );
         static::assertCount(1, $methods);
-        static::assertMethod('setFooProperty');
 
         static::assertSame('setFooProperty', $methods[0]->getName());
         static::assertSame(
@@ -77,10 +58,10 @@ final class StringTypeTest extends TestCase
     public function testSetterParameterName(): void
     {
         $methods = $this->getMethods(
-            StringAccessorsCases::class,
+            DoubleAccessorsCases::class,
             'setterParamenterNameProperty',
             [
-                'type' => 'string',
+                'type' => 'double',
                 'setterParameter' => 'fooParameter'
             ]
         );
@@ -95,10 +76,10 @@ final class StringTypeTest extends TestCase
     public function testGetterOnly(): void
     {
         $methods = $this->getMethods(
-            StringAccessorsCases::class,
+            DoubleAccessorsCases::class,
             'getterOnlyProperty',
             [
-                'type' => 'string',
+                'type' => 'double',
                 'setter' => false,
                 'getterMethod' => 'getFooProperty'
             ]
@@ -114,7 +95,8 @@ final class StringTypeTest extends TestCase
         string $property = 'property',
         string $parameter = 'property'
     ): string {
-        return '    public function ' . $method . '(string $' . $parameter . '): self
+        return '    /** @param double $' . $parameter. ' */
+    public function ' . $method . '(float $' . $parameter . '): self
     {
         $this->' . $property . ' = $' . $parameter . ';
 
@@ -124,7 +106,8 @@ final class StringTypeTest extends TestCase
 
     private function getGetterCode(string $method = 'getProperty', string $property = 'property'): string
     {
-        return '    public function ' . $method . '(): string
+        return '    /** @return double */
+    public function ' . $method . '(): float
     {
         return $this->' . $property . ';
     }';
@@ -132,7 +115,8 @@ final class StringTypeTest extends TestCase
 
     private function getNullableSetterCode(): string
     {
-        return '    public function setNullableProperty(?string $nullableProperty): self
+        return '    /** @param ?double $nullableProperty */
+    public function setNullableProperty(?float $nullableProperty): self
     {
         $this->nullableProperty = $nullableProperty;
 
@@ -142,7 +126,8 @@ final class StringTypeTest extends TestCase
 
     private function getNullableGetterCode(): string
     {
-        return '    public function getNullableProperty(): ?string
+        return '    /** @return ?double */
+    public function getNullableProperty(): ?float
     {
         return $this->nullableProperty;
     }';

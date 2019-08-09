@@ -19,16 +19,13 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
     use GetGetterCodeTrait;
     use TemplateTrait;
 
-    public function getMethods(
-        PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
-        array $config
-    ): MethodDefinitionArray {
+    public function getMethods(PropertyDefinition $propertyDefinition, array $config): MethodDefinitionArray
+    {
         $methods = new MethodDefinitionArray();
 
         $this
-            ->addSetter($propertyDefinition, $propertyReflection, $config, $methods)
-            ->addGetter($propertyDefinition, $propertyReflection, $config, $methods);
+            ->addSetter($propertyDefinition, $config, $methods)
+            ->addGetter($propertyDefinition, $config, $methods);
 
         return $methods;
     }
@@ -36,12 +33,11 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
     /** @return $this */
     protected function addSetter(
         PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
         array $config,
         MethodDefinitionArray $methods
     ): self {
         if ($config['setter'] === true) {
-            $methodName = $config['setterMethod'] ?? 'set' . ucfirst($propertyReflection->getName());
+            $methodName = $config['setterMethod'] ?? 'set' . ucfirst($propertyDefinition->getName());
 
             $setterConfig = [
                 'type' => $config['type'],
@@ -50,7 +46,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
                 'parameter' => $config['setterParameter']
             ];
             $methods[] = (new MethodDefinition($methodName))
-                ->setCode($this->getSetterCode($propertyDefinition, $propertyReflection, $setterConfig));
+                ->setCode($this->getSetterCode($propertyDefinition, $setterConfig));
         }
 
         return $this;
@@ -59,12 +55,11 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
     /** @return $this */
     protected function addGetter(
         PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
         array $config,
         MethodDefinitionArray $methods
     ): self {
         if ($config['getter'] === true) {
-            $methodName = $config['getterMethod'] ?? 'get' . ucfirst($propertyReflection->getName());
+            $methodName = $config['getterMethod'] ?? 'get' . ucfirst($propertyDefinition->getName());
 
             $getterConfig = [
                 'type' => $config['type'],
@@ -72,7 +67,7 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
                 'method' => $methodName
             ];
             $methods[] = (new MethodDefinition($methodName))
-                ->setCode($this->getGetterCode($propertyDefinition, $propertyReflection, $getterConfig));
+                ->setCode($this->getGetterCode($propertyDefinition, $getterConfig));
         }
 
         return $this;

@@ -16,18 +16,15 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
 {
     use RemovePluralTrait;
 
-    public function getMethods(
-        PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
-        array $config
-    ): MethodDefinitionArray {
+    public function getMethods(PropertyDefinition $propertyDefinition, array $config): MethodDefinitionArray
+    {
         $methods = new MethodDefinitionArray();
 
         $this
-            ->addSetter($propertyDefinition, $propertyReflection, $config, $methods)
-            ->addAdder($propertyDefinition, $propertyReflection, $config, $methods)
-            ->addGetter($propertyDefinition, $propertyReflection, $config, $methods)
-            ->addRemover($propertyDefinition, $propertyReflection, $config, $methods)
+            ->addSetter($propertyDefinition, $config, $methods)
+            ->addAdder($propertyDefinition, $config, $methods)
+            ->addGetter($propertyDefinition, $config, $methods)
+            ->addRemover($propertyDefinition, $config, $methods)
             ->addClearer($propertyDefinition, $config, $methods);
 
         return $methods;
@@ -35,12 +32,11 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
 
     protected function addAdder(
         PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
         array $config,
         MethodDefinitionArray $methods
     ): self {
         if ($config['adder'] === true) {
-            $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'], $propertyReflection)[1];
+            $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'])[1];
             $phpTypeHint = PropertyType::getSingularPhpTypeFromIterable($phpDocType, $config['adderAllowNull']);
             if (substr($config['type'], -2) === '[]' && strpos($config['type'], '|') === false) {
                 $phpTypeHint = substr($config['type'], 0, -2);
@@ -75,12 +71,11 @@ class IterableCodeGenerator extends SetterGetterCodeGenerator
 
     protected function addRemover(
         PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
         array $config,
         MethodDefinitionArray $methods
     ): self {
         if ($config['remover'] === true) {
-            $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'], $propertyReflection)[1];
+            $phpDocType = PropertyType::getSingularPhpAndPhpDocTypes($config['type'])[1];
             $methodName =
                 $config['removerMethod'] ?? 'remove' . $this->removePlural(ucfirst($propertyDefinition->getName()));
 

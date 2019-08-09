@@ -17,12 +17,9 @@ trait GetSetterCodeTrait
 
     abstract protected function showTemplateBlock(string &$code, string $name, bool $show = true): void;
 
-    protected function getSetterCode(
-        PropertyDefinition $propertyDefinition,
-        \ReflectionProperty $propertyReflection,
-        array $config
-    ): ?string {
-        [$phpTypeHint, $phpDocType] = PropertyType::getPhpAndPhpDocTypes($config['type'], $propertyReflection);
+    protected function getSetterCode(PropertyDefinition $propertyDefinition, array $config): ?string
+    {
+        [$phpTypeHint, $phpDocType] = PropertyType::getPhpAndPhpDocTypes($config['type']);
 
         $return = $this->getTemplateContent(
             $config['template'] ?? __DIR__ . '/../Templates/SetterGetter/setter.tpl'

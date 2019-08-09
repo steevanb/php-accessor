@@ -8,14 +8,16 @@ use Doctrine\Common\Annotations\{
     AnnotationReader,
     AnnotationRegistry
 };
-use steevanb\PhpAccessor\{Annotation\Accessors,
+use steevanb\PhpAccessor\{
+    Annotation\Accessors,
     Annotation\Parser\AnnotationParserInterface,
     Annotation\Parser\AnnotationParserService,
     Property\PropertyDefinition,
     Property\PropertyDefinitionArray,
     Property\PropertyType,
     Report\PropertyReport,
-    Report\Report};
+    Report\Report
+};
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileCodeAnalyzer implements CodeAnalyzerInterface
@@ -101,7 +103,7 @@ class FileCodeAnalyzer implements CodeAnalyzerInterface
             $propertyDefinition
                 ->setHasAnnotation(true)
                 ->addMethods(
-                    $parser->getCodeGenerator()->getMethods($propertyDefinition, $propertyReflection, $options)
+                    $parser->getCodeGenerator()->getMethods($propertyDefinition, $options)
                 );
 
             $this->addPropertyDefinition($propertyDefinition);

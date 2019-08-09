@@ -7,18 +7,16 @@ namespace steevanb\PhpAccessor\Tests\CodeGenerator\SetterGetterCodeGenerator;
 use steevanb\PhpAccessor\{
     CodeGenerator\SetterGetterCodeGenerator,
     Method\MethodDefinitionArray,
-    Property\PropertyDefinition,
-    Tests\AllAccessorsCases
+    Property\PropertyDefinition
 };
 
 trait GetMethodsTrait
 {
-    protected function getMethods(string $property, array $config): MethodDefinitionArray
+    protected function getMethods(string $fqcn, string $property, array $config): MethodDefinitionArray
     {
         return (new SetterGetterCodeGenerator())
             ->getMethods(
-                new PropertyDefinition(AllAccessorsCases::class, basename(AllAccessorsCases::class), $property),
-                new \ReflectionProperty(AllAccessorsCases::class, $property),
+                new PropertyDefinition($fqcn, basename($fqcn), $property),
                 array_merge(
                     [
                         'setter' => true,
