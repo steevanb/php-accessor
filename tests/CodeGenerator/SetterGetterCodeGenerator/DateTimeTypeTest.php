@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Tests\CodeGenerator\SetterGetterCodeGenerator;
 
-use steevanb\PhpAccessor\Tests\AccessorsCases\StringAccessorsCases;
+use steevanb\PhpAccessor\Tests\AccessorsCases\DateTimeAccessorsCases;
 
-final class StringTypeTest extends AbstractScalarTypeTest
+final class DateTimeTypeTest extends AbstractScalarTypeTest
 {
     protected function getClassToTest(): string
     {
-        return StringAccessorsCases::class;
+        return DateTimeAccessorsCases::class;
     }
 
     protected function getPhpTypeHint(): string
     {
-        return 'string';
+        return '\\' . \DateTime::class;
     }
 }
