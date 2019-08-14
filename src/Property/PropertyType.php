@@ -43,6 +43,10 @@ class PropertyType
             $phpTypeHint = (substr($phpTypeHint, 0, 1) === '?' ? '?' : null) . 'array';
         }
 
+        if (in_array($phpDocType, ['double', '?double', 'integer', '?integer'])) {
+            $phpDocType = null;
+        }
+
         return [$phpTypeHint, $phpDocType];
     }
 

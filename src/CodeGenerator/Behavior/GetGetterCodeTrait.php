@@ -36,7 +36,7 @@ trait GetGetterCodeTrait
         );
 
         $this->showTemplateBlock($return, 'return', is_string($phpTypeHint));
-        $this->showTemplateBlock($return, 'phpDoc', $phpTypeHint !== $phpDocType);
+        $this->showTemplateBlock($return, 'phpDoc', is_string($phpDocType) && $phpTypeHint !== $phpDocType);
 
         return $return;
     }

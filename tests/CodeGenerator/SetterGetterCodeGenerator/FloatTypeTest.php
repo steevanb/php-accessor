@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace steevanb\PhpAccessor\Tests\CodeGenerator\SetterGetterCodeGenerator;
 
-use steevanb\PhpAccessor\Tests\AccessorsCases\StringAccessorsCases;
+use steevanb\PhpAccessor\Tests\AccessorsCases\FloatAccessorsCases;
 
-final class StringTypeTest extends AbstractScalarTypeTest
+final class FloatTypeTest extends AbstractScalarTypeTest
 {
     protected function getClassToTest(): string
     {
-        return StringAccessorsCases::class;
+        return FloatAccessorsCases::class;
     }
 
     protected function getPhpTypeHint(): string
     {
-        return 'string';
+        return 'float';
     }
 }

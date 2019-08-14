@@ -23,6 +23,10 @@ class SetterGetterCodeGenerator implements CodeGeneratorInterface
     {
         $methods = new MethodDefinitionArray();
 
+        if (in_array($config['type'], ['double', '?double', 'null|double', 'double|null'])) {
+            $config['type'] = str_replace('double', 'float', $config['type']);
+        }
+
         $this
             ->addSetter($propertyDefinition, $config, $methods)
             ->addGetter($propertyDefinition, $config, $methods);
