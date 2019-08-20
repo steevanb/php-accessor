@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace steevanb\PhpAccessor\Property;
 
 use phpDocumentor\{
-    Reflection\DocBlock\Tags\Var_,
-    Reflection\DocBlockFactory,
     Reflection\Type,
     Reflection\TypeResolver,
     Reflection\Types\Array_,
@@ -90,12 +88,11 @@ class PropertyType
                 case String_::class:
                 case This::class:
                 case Void_::class:
+                case Object_::class:
                     $return .= (string) $finalType;
                     break;
                 default:
-                    if (is_string($return) && get_class($finalType) !== Object_::class) {
-                        throw new \Exception('Unknown type "' . get_class($finalType) . '".');
-                    }
+                    throw new \Exception('Unknown type "' . get_class($finalType) . '".');
                     break;
             }
         } else {

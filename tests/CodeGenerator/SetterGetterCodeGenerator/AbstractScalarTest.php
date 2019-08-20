@@ -12,7 +12,7 @@ use steevanb\PhpAccessor\{
     Tests\CodeGenerator\SetterGetterCodeGenerator\Behavior\AssertMethodTrait
 };
 
-abstract class AbstractScalarTypeTest extends TestCase
+abstract class AbstractScalarTest extends TestCase
 {
     use AssertMethodTrait;
 
