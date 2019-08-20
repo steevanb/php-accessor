@@ -6,7 +6,7 @@ namespace steevanb\PhpAccessor\Tests\CodeGenerator\SetterGetterCodeGenerator;
 
 use steevanb\PhpAccessor\Tests\AccessorsCases\StringAccessorsCases;
 
-final class StringTypeTest extends AbstractScalarTypeTest
+final class StringTest extends AbstractScalarTest
 {
     protected function getClassToTest(): string
     {
